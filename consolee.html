@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - IP Check</title>
+<style>
+  body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f0f2f5; }
+  header { background: #4a90e2; color: white; padding: 20px; text-align: center; }
+  h1 { margin: 0; font-size: 24px; }
+  .container { display: flex; flex-direction: column; padding: 20px; display: none; }
+  .stats { display: flex; gap: 20px; margin-bottom: 20px; }
+  .stat-card { background: white; flex: 1; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+  .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+  .tab-button { padding: 10px 20px; border: none; border-radius: 5px; background: #ddd; cursor: pointer; font-weight: bold; }
+  .tab-button.active { background: #4a90e2; color: white; }
+  .section { display: none; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+  .section.active { display: block; }
+  table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+  th { background: #eee; }
+  button { padding: 5px 10px; margin-right: 5px; cursor: pointer; border: none; border-radius: 5px; background: #4a90e2; color: white; }
+  button:hover { background: #357ab8; }
+  input[type=text], input[type=password] { padding: 5px; width: 200px; border-radius: 5px; border: 1px solid #ccc; }
+  .flex { display: flex; gap: 10px; align-items: center; margin-top: 10px; }
+  #loginScreen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #f0f2f5; }
+  #loginScreen input, #loginScreen button { margin: 5px; }
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <h2>Ingresa la contraseña</h2>
+  <input type="password" id="passwordInput" placeholder="Contraseña">
+  <button onclick="checkPassword()">Entrar</button>
+  <p id="errorMsg" style="color:red; display:none;">Contraseña incorrecta</p>
+</div>
+
+<header>
+  <h1>Admin Dashboard - IP Check</h1>
+</header>
+
+<div class="container" id="dashboard">
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card">Total Accesos: <span id="statTotal">0</span></div>
+    <div class="stat-card">Accesos Hoy: <span id="statHoy">0</span></div>
+    <div class="stat-card">Total IPs Permitidas: <span id="statIPs">0</span></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-button active" onclick="showSection('inicio')">Inicio</button>
+    <button class="tab-button" onclick="showSection('ips')">IPs Permitidas</button>
+    <button class="tab-button" onclick="showSection('logs')">Logs</button>
+  </div>
+
+  <!-- Sección Inicio -->
+  <div class="section active" id="inicio">
+    <h2>Control del Sistema</h2>
+    <div class="flex">
+      <label>Activo: <input type="checkbox" id="encendidoActivo"></label>
+      <input type="text" id="encendidoMensaje" placeholder="Mensaje cuando está apagado">
+      <button onclick="guardarEncendido()">Guardar</button>
+    </div>
+    <h3>Bloqueos Recientes</h3>
+    <table id="tablaBloqueos">
+      <thead><tr><th>IP</th><th>Motivo</th><th>Fecha</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- Sección IPs Permitidas -->
+  <div class="section" id="ips">
+    <h2>IPs Permitidas</h2>
+    <div class="flex">
+      <input type="text" id="nuevaIP" placeholder="Agregar IP">
+      <button onclick="agregarIP()">Agregar</button>
+    </div>
+    <table id="tablaIPs">
+      <thead><tr><th>IP</th><th>Activa</th><th>Acciones</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- Sección Logs -->
+  <div class="section" id="logs">
+    <h2>Logs de Acceso</h2>
+    <table id="tablaLogs">
+      <thead><tr><th>IP</th><th>Permitido</th><th>Motivo</th><th>User Agent</th><th>Fecha</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+const APP_ID = "278E597E-6BC5-4CB8-B649-636DE156563B";
+const REST_KEY = "4930CFD6-E6EB-4F95-8D96-16B2E5208391";
+let encendidoId = null;
+
+// Contraseña ofuscada (base64 de "0795")
+const PASSWORD_OBFUSCADA = 'MDc5NQ==';
+
+function checkPassword() {
+  const input = document.getElementById('passwordInput').value;
+  const decoded = atob(PASSWORD_OBFUSCADA);
+  if (input === decoded) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'flex';
+    initDashboard();
+  } else {
+    document.getElementById('errorMsg').style.display = 'block';
+  }
+}
+
+function initDashboard() {
+  cargarEncendido();
+  cargarIPs();
+  cargarLogs();
+  setInterval(cargarLogs, 60000);
+}
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.tab-button[onclick*='${id}']`).classList.add('active');
+}
+
+// --- ENCENDIDO ---
+async function cargarEncendido() {
+  const res = await fetch(`https://api.backendless.com/${APP_ID}/${REST_KEY}/data/encendido?pageSize=1`);
+  const data = await res.json();
+  if (data.length) {
+    encendidoId = data[0].objectId;
+    document.getElementById('encendidoActivo').checked = data[0].activo;
+    document.getElementById('encendidoMensaje').value = data[0].mensaje || '';
+  } else {
+    const crear = await fetch(`https://api.backendless.com/${APP_ID}/${REST_KEY}/data/encendido`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ activo: true, mensaje: '' })
+    });
+    const nuevo = await crear.json();
+    encendidoId = nuevo.objectId;
+    document.getElementById('encendidoActivo').checked = true;
+  }
+}
+
+async function guardarEncendido() {
+  if (!encendidoId) return alert('No se encontró el registro de encendido');
+  const activo = document.getElementById('encendidoActivo').checked;
+  const mensaje = document.getElementById('encendidoMensaje').value;
+
+  await fetch(`https://api.backendless.com/${APP_ID}/${REST_KEY}/data/encendido/${encendidoId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ activo, mensaje })
+  });
+  alert('Encendido actualizado');
+}
+
+// --- IPS ---
+async function cargarIPs() {
+  const res = await fetch(`https://api.backendless.com/${APP_ID}/${REST_KEY}/data/ips_permitidas`);
+  const ips = await res.json();
+  document.getElementById('statIPs').innerText = ips.length;
+  const tbody = document.querySelector('#tablaIPs tbody');
+  tbody.innerHTML = '';
+  ips.forEach(ip => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${ip.ip}</td><td>${ip.activa}</td><td><button onclick="toggleIP('${ip.objectId}', ${ip.activa})">Cambiar</button> <button onclick="borrarIP('${ip.objectId}')">Borrar</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+async function agregarIP() {
+  const ip = document.getElementById('nuevaIP').value;
+  if (!ip) return alert('Ingresa una IP');
+  await fetch(`https://api.backendless.com/${APP_ID}/${REST_KEY}/data/ips_permitidas`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ip, activa: true })
+  });
+  document.getElementById('nuevaIP').value = '';
+  cargarIPs();
+}
+
+async function toggleIP(id, actual) {
+  await fetch(`https://api.backendless.com/${APP_ID}/${REST_KEY}/data/ips_permitidas/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ activa: !actual })
+  });
+  cargarIPs();
+}
+
+async function borrarIP(id) {
+  await fetch(`https://api.backendless.com/${APP_ID}/${REST_KEY}/data/ips_permitidas/${id}`, { method: 'DELETE' });
+  cargarIPs();
+}
+
+// --- LOGS ---
+async function cargarLogs() {
+  const res = await fetch(`https://api.backendless.com/${APP_ID}/${REST_KEY}/data/ip_logs?sortBy=fecha%20desc&pageSize=100`);
+  const logs = await res.json();
+  const tbody = document.querySelector('#tablaLogs tbody');
+  const tbodyBloqueos = document.querySelector('#tablaBloqueos tbody');
+  tbody.innerHTML = '';
+  tbodyBloqueos.innerHTML = '';
+
+  const hoy = new Date().toDateString();
+  let countHoy = 0;
+
+  logs.forEach(log => {
+    const fechaStr = new Date(log.fecha).toLocaleString();
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${log.ip}</td><td>${log.permitido}</td><td>${log.motivo}</td><td>${log.userAgent}</td><td>${fechaStr}</td>`;
+    tbody.appendChild(tr);
+
+    if (!log.permitido) {
+      const trBloq = document.createElement('tr');
+      trBloq.innerHTML = `<td>${log.ip}</td><td>${log.motivo}</td><td>${fechaStr}</td>`;
+      tbodyBloqueos.appendChild(trBloq);
+    }
+
+    if (new Date(log.fecha).toDateString() === hoy) countHoy++;
+  });
+
+  document.getElementById('statTotal').innerText = logs.length;
+  document.getElementById('statHoy').innerText = countHoy;
+}
+// --- INIT ---
+cargarEncendido();
+cargarIPs();
+cargarLogs();
+setInterval(cargarLogs, 10000); // refresco automático cada minuto
+</script>
+
+</body>
+</html>
