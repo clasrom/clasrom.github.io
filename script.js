@@ -206,12 +206,14 @@
         });
       }
       // NUEVO PARA SERVER
-      const fotlerbutton = document.getElementById('foot');
-      if (fotlerbutton) {
-        fotlerbutton.addEventListener('click', function() {
-          abrirEnIframe('gracias.html');
-        });
-      }
+        const fotlerbutton = document.getElementById('foot');
+        if (fotlerbutton) {
+          fotlerbutton.addEventListener('click', function() {
+            // Abre Gmail para enviar un correo a la dirección indicada
+            window.location.href = 'mailto:clashrom.github.io@gmail.com';
+          });
+        }
+
       // BOTON TERMINOS Y CONDICIONES
       const tyc = document.getElementById('tyc');
       if (tyc) {
