@@ -206,14 +206,12 @@
         });
       }
       // NUEVO PARA SERVER
-        const fotlerbutton = document.getElementById('foot');
-        if (fotlerbutton) {
-          fotlerbutton.addEventListener('click', function() {
-            // Abre Gmail para enviar un correo a la dirección indicada
-            window.location.href = 'mailto:clashrom.github.io@gmail.com';
-          });
-        }
-
+      const fotlerbutton = document.getElementById('foot');
+      if (fotlerbutton) {
+        fotlerbutton.addEventListener('click', function() {
+          abrirEnIframe('gracias.html');
+        });
+      }
       // BOTON TERMINOS Y CONDICIONES
       const tyc = document.getElementById('tyc');
       if (tyc) {
@@ -374,6 +372,27 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+// --- ANIMACIÓN SUAVE DE BOTONES AL APARECER ---
+document.addEventListener("DOMContentLoaded", () => {
+  const botonesMenu = document.querySelectorAll("#menu .menu-button");
+
+  const observerBotones = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const btn = entry.target;
+      if (entry.isIntersecting) {
+        // Muestra el botón y aplica animación solo la primera vez
+        if (!btn.classList.contains("visible")) {
+          btn.classList.add("visible", "animate__animated", "animate__fadeIn");
+          btn.style.setProperty('--animate-duration', '0.7s');
+        }
+      }
+    });
+  }, {
+    threshold: 0.2
+  });
+
+  botonesMenu.forEach(btn => observerBotones.observe(btn));
+});
 // --- CAMBIO DE fullscreenImage CON imageInput Y BOTONES .images-rows ---
 document.addEventListener('DOMContentLoaded', () => {
   const fullscreenImage = document.getElementById('fullscreenImage');
@@ -407,6 +426,5 @@ document.addEventListener('DOMContentLoaded', () => {
 if (window.location.pathname === "/roll") {
   document.body.classList.add("roll");
 }
-
 
 
