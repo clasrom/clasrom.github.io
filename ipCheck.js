@@ -31,7 +31,7 @@
     }
   }
 
-  async function verificarEncendido() {
+  async function obtenerEncendido() {
     const resp = await fetch(
       `https://api.backendless.com/${APP_ID}/${REST_KEY}/data/encendido?pageSize=1`
     );
@@ -39,7 +39,10 @@
     if (!resp.ok) throw new Error("Error consultando encendido");
 
     const data = await resp.json();
-    if (!data.length) return true; // si no existe registro, se permite
+    if (!data.length) {
+      // valores por defecto si no existe registro
+      return { activo: true, filtro_ip: true };
+    }
 
     return data[0];
   }
@@ -48,12 +51,29 @@
     let ip = "desconocida";
 
     try {
-      // 1️⃣ IP pública
+      // 1️⃣ Comprobar ENCENDIDO y FILTRO IP
+      const encendido = await obtenerEncendido();
+
+      if (encendido.activo === false) {
+        await logAcceso(ip, false, "sistema_apagado");
+        mostrarPopup(encendido.mensaje);
+        location.replace("https://google.com");
+        return;
+      }
+
+      // 🔥 Si el filtro de IP está desactivado, se permite el acceso directamente
+      if (encendido.filtro_ip === false) {
+        await logAcceso("sin_verificar", true, "filtro_ip_desactivado");
+        document.documentElement.style.visibility = "visible";
+        return;
+      }
+
+      // 2️⃣ Obtener IP pública
       const ipResp = await fetch("https://api.ipify.org?format=json", { cache: "no-store" });
       const ipData = await ipResp.json();
       ip = ipData.ip;
 
-      // 2️⃣ IPs permitidas
+      // 3️⃣ Obtener IPs permitidas
       const dbResp = await fetch(
         `https://api.backendless.com/${APP_ID}/${REST_KEY}/data/ips_permitidas?where=activa=true`
       );
@@ -61,20 +81,9 @@
 
       const ipsPermitidas = (await dbResp.json()).map(row => row.ip);
 
-      // 3️⃣ Validar IP
+      // 4️⃣ Validar IP
       if (!ipsPermitidas.includes(ip)) {
         await logAcceso(ip, false, "no_autorizada");
-        location.replace("https://google.com");
-        return;
-      }
-
-      // 4️⃣ Comprobar ENCENDIDO
-      const encendido = await verificarEncendido();
-
-      if (encendido.activo === false) {
-        await logAcceso(ip, false, "sistema_apagado");
-        location.replace("https://google.com");
-        mostrarPopup(encendido.mensaje);
         location.replace("https://google.com");
         return;
       }
@@ -86,7 +95,7 @@
     } catch (err) {
       console.error("Error IP Check:", err);
       await logAcceso(ip, false, "error");
-      document.documentElement.style.visibility = "visible";
+      document.documentElement.style.visibility = "none";
     }
   }
 
