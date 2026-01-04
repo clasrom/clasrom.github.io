@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="style2.css">
+  <link rel="stylesheet" href="overlay.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
@@ -21,10 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
 </head>
 <body>
-  <audio id="musica" loop>
-    <!-- Puedes poner aquí cualquier enlace directo a un archivo .mp3 -->
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-  </audio>
+  <div id="overlay"></div>
   <div id="adblock-overlay">
     <div  id="adblock-box">
       <h2>Bloqueador de anuncios detectado</h2>
@@ -613,15 +611,7 @@
   </script>
   <script src="script.js"></script>
   <script src="iframe.js"></script>
-    <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-40XZGY812X"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-40XZGY812X');
-</script>
+  <script src="cargar.js"></script>
 </body>
 </html>
  
