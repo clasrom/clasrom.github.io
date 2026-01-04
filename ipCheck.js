@@ -4,14 +4,7 @@
   const APP_ID = "278E597E-6BC5-4CB8-B649-636DE156563B";
   const REST_KEY = "4930CFD6-E6EB-4F95-8D96-16B2E5208391";
 
-  // Ocultar todo el documento y el menú al inicio
   document.documentElement.style.visibility = "hidden";
-
-  const menu = document.getElementById("menu");
-  if (menu) menu.style.display = "none";
-
-  const fullscreenImage = document.getElementById("fullscreenImage");
-  if (fullscreenImage) fullscreenImage.style.display = "block"; // Mostrar mientras se verifica
 
   function mostrarPopup(mensaje) {
     alert(mensaje || "El sistema está desactivado temporalmente.");
@@ -80,6 +73,7 @@
 
       if (encendido.activo === false) {
         await logAcceso(ip, false, "sistema_apagado");
+        location.replace("https://google.com");
         mostrarPopup(encendido.mensaje);
         location.replace("https://google.com");
         return;
@@ -87,24 +81,12 @@
 
       // ✅ Todo correcto
       await logAcceso(ip, true, "ok");
-
-      // Mostrar documento y menú
       document.documentElement.style.visibility = "visible";
-      if (menu) menu.style.display = "block";
-
-      // Ocultar fullscreenImage al mostrar el contenido
-      if (fullscreenImage) fullscreenImage.style.display = "none";
 
     } catch (err) {
       console.error("Error IP Check:", err);
       await logAcceso(ip, false, "error");
-
-      // no Mostrar documento aunque haya error
-      document.documentElement.style.visibility = "hidden";
-      if (menu) menu.style.display = "none";
-
-      // Ocultar fullscreenImage al mostrar el contenido
-      if (fullscreenImage) fullscreenImage.style.display = "block";
+      document.documentElement.style.visibility = "visible";
     }
   }
 
