@@ -439,5 +439,3 @@ document.addEventListener('DOMContentLoaded', () => {
 if (window.location.pathname === "/roll") {
   document.body.classList.add("roll");
 }
-
-
