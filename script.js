@@ -20,40 +20,29 @@
         toggleSettingsBtn.classList.add('compact');
       }
     }
-    window.addEventListener('scroll', updateAjustesButton, { passive: true });
-    document.addEventListener('scroll', updateAjustesButton, { passive: true });
-    document.body.addEventListener('scroll', updateAjustesButton, { passive: true });
+    window.addEventListener('scroll', updateAjustesButton, {passive:true});
+    document.addEventListener('scroll', updateAjustesButton, {passive:true});
+    document.body.addEventListener('scroll', updateAjustesButton, {passive:true});
     document.addEventListener('DOMContentLoaded', updateAjustesButton);
-
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Tab") {
-        e.preventDefault();
+    if (e.key === "Tab") {
+      e.preventDefault();
+      fullscreenImage.classList.toggle("hidden");
 
-        const menu = document.getElementById("menu");
-        const logo = document.getElementById("buscador-logo-img");
+      const logo = document.getElementById("buscador-logo-img");
 
-        // Alterna fullscreen
-        fullscreenImage.classList.toggle("hidden");
-
-        const fullscreenActivo = !fullscreenImage.classList.contains("hidden");
-
-        // 👉 Control del menú
-        if (menu) {
-          if (fullscreenActivo) {
-            menu.classList.add("hidden");   // fullscreen ON → ocultar menú
-          } else {
-            menu.classList.remove("hidden"); // fullscreen OFF → mostrar menú
-          }
-        }
-
-        // 👉 Animación del logo SOLO cuando se sale de fullscreen
-        if (!fullscreenActivo && logo) {
+      // Si fullscreenImage acaba de esconderse (tiene la clase hidden)
+      if (fullscreenImage.classList.contains("hidden")) {
+        if (logo) {
+          // Quita animaciones anteriores
           logo.classList.remove("animate__animated", "animate__rubberBand");
           void logo.offsetWidth; // reinicia animación
+          // Aplica la nueva animación
           logo.classList.add("animate__animated", "animate__rubberBand");
         }
       }
-    });
+    }
+  });
 
     toggleSettingsBtn.addEventListener("click", () => {
       if (settingsPanel.classList.contains("show")) {
