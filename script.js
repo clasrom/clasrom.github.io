@@ -20,29 +20,32 @@
         toggleSettingsBtn.classList.add('compact');
       }
     }
-    window.addEventListener('scroll', updateAjustesButton, {passive:true});
-    document.addEventListener('scroll', updateAjustesButton, {passive:true});
-    document.body.addEventListener('scroll', updateAjustesButton, {passive:true});
+    window.addEventListener('scroll', updateAjustesButton, { passive: true });
+    document.addEventListener('scroll', updateAjustesButton, { passive: true });
+    document.body.addEventListener('scroll', updateAjustesButton, { passive: true });
     document.addEventListener('DOMContentLoaded', updateAjustesButton);
+
     document.addEventListener("keydown", (e) => {
-    if (e.key === "Tab") {
-      e.preventDefault();
-      fullscreenImage.classList.toggle("hidden");
+      if (e.key === "Tab") {
+        e.preventDefault();
 
-      const logo = document.getElementById("buscador-logo-img");
+        const menu = document.getElementById("menu");
+        const logo = document.getElementById("buscador-logo-img");
 
-      // Si fullscreenImage acaba de esconderse (tiene la clase hidden)
-      if (fullscreenImage.classList.contains("hidden")) {
-        if (logo) {
-          // Quita animaciones anteriores
+        // Alterna fullscreen
+        fullscreenImage.classList.toggle("hidden");
+
+        const fullscreenActivo = !fullscreenImage.classList.contains("hidden");
+
+
+        // 👉 Animación del logo SOLO cuando se sale de fullscreen
+        if (!fullscreenActivo && logo) {
           logo.classList.remove("animate__animated", "animate__rubberBand");
           void logo.offsetWidth; // reinicia animación
-          // Aplica la nueva animación
           logo.classList.add("animate__animated", "animate__rubberBand");
         }
       }
-    }
-  });
+    });
 
     toggleSettingsBtn.addEventListener("click", () => {
       if (settingsPanel.classList.contains("show")) {
@@ -374,27 +377,55 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
-// --- ANIMACIÓN SUAVE DE BOTONES AL APARECER ---
+// --- ANIMACIÓN SUAVE DE BOTONES AL APARECER CON RETRASO ---
 document.addEventListener("DOMContentLoaded", () => {
   const botonesMenu = document.querySelectorAll("#menu .menu-button");
 
-  const observerBotones = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      const btn = entry.target;
-      if (entry.isIntersecting) {
-        // Muestra el botón y aplica animación solo la primera vez
-        if (!btn.classList.contains("visible")) {
-          btn.classList.add("visible", "animate__animated", "animate__fadeIn");
-          btn.style.setProperty('--animate-duration', '0.7s');
+  // Esperamos 1 segundo antes de activar la animación
+  setTimeout(() => {
+    const observerBotones = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const btn = entry.target;
+        if (entry.isIntersecting) {
+          // Muestra el botón y aplica animación solo la primera vez
+          if (!btn.classList.contains("visible")) {
+            btn.classList.add("visible", "animate__animated", "animate__fadeIn");
+            btn.style.setProperty('--animate-duration', '0.7s');
+          }
         }
-      }
+      });
+    }, {
+      threshold: 0.2
     });
-  }, {
-    threshold: 0.2
-  });
 
-  botonesMenu.forEach(btn => observerBotones.observe(btn));
+    botonesMenu.forEach(btn => observerBotones.observe(btn));
+  }, 1000); // 1000 ms = 1 segundo
 });
+// --- ANIMACIÓN SUAVE DE EXPAND-ARROW CON RETRASO ---
+document.addEventListener("DOMContentLoaded", () => {
+  const expandArrows = document.querySelectorAll(".expand-arrow");
+
+  // Esperamos 1 segundo antes de activar la animación
+  setTimeout(() => {
+    const observerArrows = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const arrow = entry.target;
+        if (entry.isIntersecting) {
+          // Muestra la flecha y aplica animación solo la primera vez
+          if (!arrow.classList.contains("visible")) {
+            arrow.classList.add("visible", "animate__animated", "animate__fadeIn");
+            arrow.style.setProperty('--animate-duration', '0.7s');
+          }
+        }
+      });
+    }, {
+      threshold: 0.2
+    });
+
+    expandArrows.forEach(arrow => observerArrows.observe(arrow));
+  }, 1000); // 1 segundo de retraso
+});
+
 // --- CAMBIO DE fullscreenImage CON imageInput Y BOTONES .images-rows ---
 document.addEventListener('DOMContentLoaded', () => {
   const fullscreenImage = document.getElementById('fullscreenImage');
