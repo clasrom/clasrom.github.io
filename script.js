@@ -217,11 +217,12 @@
           window.open('https://poki.com/' + letrasAzar, '_blank');
         });
       }
-      // NUEVO PARA SERVER
+      // NUEVO PARA FOOTER
       const fotlerbutton = document.getElementById('foot');
       if (fotlerbutton) {
         fotlerbutton.addEventListener('click', function() {
-          abrirEnIframe('gracias.html');
+        // Abre Gmail para enviar un correo a la dirección indicada
+          window.location.href = 'mailto:clashrom.github.io@gmail.com';
         });
       }
       // BOTON TERMINOS Y CONDICIONES
