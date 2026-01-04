@@ -95,9 +95,25 @@
     } catch (err) {
       console.error("Error IP Check:", err);
       await logAcceso(ip, false, "error");
-      document.documentElement.style.visibility = "none";
+      document.documentElement.style.visibility = "visible";
     }
   }
 
+  // Ejecutar la verificación inicial
   verificarIP();
+
+  // Revisar cada 10 segundos si activo y filtro_ip siguen siendo true
+  setInterval(async () => {
+    try {
+      const encendido = await obtenerEncendido();
+      if (!encendido.activo || !encendido.filtro_ip) {
+        mostrarPopup(encendido.mensaje);
+        location.replace("https://google.com");
+      }
+      // Si ambos son true, no hacemos nada (la página sigue visible)
+    } catch (err) {
+      console.error("Error verificación periódica:", err);
+    }
+  }, 10000); // 10 segundos
+
 })();
