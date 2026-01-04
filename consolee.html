@@ -60,7 +60,7 @@
   <div class="section active" id="inicio">
     <h2>Control del Sistema</h2>
     <div class="flex">
-      <label>Activo: <input type="checkbox" id="encendidoActivo"></label>
+      <label>Activo: <input type="checkbox" id="encendidoActivo"></label><label>Filtro IP: <input type="checkbox" id="filtroIP"></label>
       <input type="text" id="encendidoMensaje" placeholder="Mensaje cuando está apagado">
       <button onclick="guardarEncendido()">Guardar</button>
     </div>
@@ -100,7 +100,7 @@ const APP_ID = "278E597E-6BC5-4CB8-B649-636DE156563B";
 const REST_KEY = "4930CFD6-E6EB-4F95-8D96-16B2E5208391";
 let encendidoId = null;
 
-// Contraseña ofuscada (base64 de "0795")
+// Contraseña
 const PASSWORD_OBFUSCADA = 'MDc5NQ==';
 
 function checkPassword() {
@@ -137,11 +137,12 @@ async function cargarEncendido() {
     encendidoId = data[0].objectId;
     document.getElementById('encendidoActivo').checked = data[0].activo;
     document.getElementById('encendidoMensaje').value = data[0].mensaje || '';
+    document.getElementById('filtroIP').checked = !!data[0].filtro_ip;
   } else {
     const crear = await fetch(`https://api.backendless.com/${APP_ID}/${REST_KEY}/data/encendido`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ activo: true, mensaje: '' })
+      body: JSON.stringify({ activo: true, mensaje: '', filtro_ip: true })
     });
     const nuevo = await crear.json();
     encendidoId = nuevo.objectId;
@@ -157,7 +158,7 @@ async function guardarEncendido() {
   await fetch(`https://api.backendless.com/${APP_ID}/${REST_KEY}/data/encendido/${encendidoId}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ activo, mensaje })
+    body: JSON.stringify({ activo, mensaje, filtro_ip: document.getElementById('filtroIP').checked })
   });
   alert('Encendido actualizado');
 }
@@ -232,11 +233,6 @@ async function cargarLogs() {
   document.getElementById('statTotal').innerText = logs.length;
   document.getElementById('statHoy').innerText = countHoy;
 }
-// --- INIT ---
-cargarEncendido();
-cargarIPs();
-cargarLogs();
-setInterval(cargarLogs, 10000); // refresco automático cada minuto
 </script>
 
 </body>
