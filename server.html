@@ -2,134 +2,194 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Classroom</title>
-  <link rel="icon" href="https://ssl.gstatic.com/classroom/favicon.png" type="image/png">
+  <title>Mi Juego</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    html, body {
-      margin: 0; padding: 0; height: 100%; overflow: hidden; background: black;
-      font-family: Arial, sans-serif;
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+
+    body {
+      height: 100vh;
+      background: radial-gradient(circle at top, #2b2b2b, #0f0f0f);
+      overflow: hidden;
+      color: white;
     }
 
-    /* Pantalla de contraseña */
-    #loginScreen {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: #000;
+    /* MENU */
+    .menu {
+      position: absolute;
+      inset: 0;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      color: white;
-      z-index: 2000;
+      justify-content: center;
+      gap: 40px;
+      transition: transform 1.2s cubic-bezier(.19,1,.22,1), opacity 1s;
+      z-index: 2;
     }
 
-    #loginInput {
-      padding: 10px;
-      font-size: 20px;
-      border-radius: 5px;
-      border: none;
-      text-align: center;
-      margin-bottom: 10px;
+    .menu.hide {
+      transform: scale(1.4) rotateX(35deg);
+      opacity: 0;
+      pointer-events: none;
     }
 
-    #loginButton {
-      padding: 10px 20px;
-      font-size: 18px;
-      border: none;
-      border-radius: 5px;
+    /* LOGO */
+    .logo {
+      width: 280px;
+      animation: float 4s ease-in-out infinite;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,.8));
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    /* BOTÓN MINECRAFT */
+    .play-btn {
+      padding: 18px 70px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #3b2f1a;
+      background: linear-gradient(#7ec850, #5fa53a);
+      border: 4px solid #3a5f2a;
+      border-radius: 6px;
       cursor: pointer;
+      box-shadow: 0 8px 0 #2f4f1f, 0 20px 40px rgba(0,0,0,.6);
+      transition: transform .1s, box-shadow .1s;
     }
 
-    /* Botón del mapa */
-    #mapButton {
+    .play-btn:active {
+      transform: translateY(6px);
+      box-shadow: 0 2px 0 #2f4f1f, 0 10px 20px rgba(0,0,0,.6);
+    }
+
+    /* IFRAME */
+    .game-container {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 1000;
-      background: rgba(255,255,255,0.9);
-      padding: 10px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 20px;
-      user-select: none;
-      display: none;
+      inset: 0;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 1.2s ease, transform 1.2s ease;
+      z-index: 1;
+    }
+
+    .game-container.show {
+      opacity: 1;
+      transform: scale(1);
     }
 
     iframe {
+      width: 100%;
+      height: 100%;
       border: none;
-      width: 100vw;
-      height: 100vh;
-      display: none;
+      background: black;
+    }
+
+    /* EFECTO FLASH */
+    .flash {
+      position: absolute;
+      inset: 0;
+      background: white;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .flash.active {
+      animation: flash 0.6s ease;
+    }
+
+    @keyframes flash {
+      0% { opacity: 0; }
+      50% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+  
+
+    /* PORTAL */
+    .portal {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 4;
+      opacity: 0;
+    }
+
+    .portal.active {
+      animation: portalFade 1.2s ease forwards;
+    }
+
+    .portal::before {
+      content: '';
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      box-shadow:
+        0 0 30px 10px #7ec850,
+        0 0 80px 40px rgba(126,200,80,.6),
+        0 0 160px 80px rgba(126,200,80,.3);
+      animation: portalGrow 1.2s ease forwards;
+    }
+
+    @keyframes portalGrow {
+      to { transform: scale(80); }
+    }
+
+    @keyframes portalFade {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Pantalla de contraseña -->
-  <div id="loginScreen">
-    <h2>Introduce la contraseña</h2>
-    <input type="password" id="loginInput" placeholder="Contraseña" />
-    <button id="loginButton">Entrar</button>
-    <p>pidele la contraseña al creador para iniciar</p>
-    <p id="errorMsg" style="color:red; display:none;">Contraseña incorrecta</p>
+  <!-- MENU -->
+  <div class="menu" id="menu">
+    <!-- CAMBIA logo.png POR TU IMAGEN -->
+    <img src="images/lospanas_logo.png" alt="Logo" class="logo" />
+    <button class="play-btn" onclick="startGame()">JUGAR</button>
   </div>
 
-  <!-- Botón que abre el mapa -->
-  <div id="mapButton" title="Abrir mapa en pestaña nueva">🗺️</div>
+  <!-- IFRAME -->
+  <div class="game-container" id="game">
+    <!-- CAMBIA LA URL DEL JUEGO -->
+    <iframe src="eagler.html"></iframe>
+  </div>
 
-  <!-- Iframe del juego -->
-  <iframe 
-    id="gameFrame"
-    src="Eaglercraft_1.12.2_WASM_Offline_Download.html"
-    allow="autoplay; encrypted-media; fullscreen; pointer-lock; clipboard-read; clipboard-write"
-    sandbox="allow-scripts allow-same-origin allow-popups allow-modals allow-pointer-lock allow-downloads allow-forms"
-    tabindex="0">
-  </iframe>
+  <div class="flash" id="flash"></div>
+  <div class="portal" id="portal"></div>
 
   <script>
-    // Contraseña ofuscada (no visible directamente)
-    const PASSWORD = atob("MTYyNTc5");
+    // === CONFIGURACIÓN DEL SERVIDOR ===
+    // Cambia a true cuando el servidor esté encendido
+    const serverOnline = false;
 
-    const loginScreen = document.getElementById("loginScreen");
-    const loginInput = document.getElementById("loginInput");
-    const loginButton = document.getElementById("loginButton");
-    const errorMsg = document.getElementById("errorMsg");
-
-    const mapButton = document.getElementById("mapButton");
-    const gameFrame = document.getElementById("gameFrame");
-
-    loginButton.addEventListener("click", () => {
-      if (loginInput.value === PASSWORD) {
-        loginScreen.style.display = "none";
-        mapButton.style.display = "block";
-        gameFrame.style.display = "block";
-      } else {
-        errorMsg.style.display = "block";
+    function startGame() {
+      if (!serverOnline) {
+        alert('⛏️ Generando terreno… El servidor aún no está listo. Ve creando equipos y preparando la estrategia 👥🔥');
+        // Expulsar de la web
+        
+        return;
       }
-    });
 
-    loginInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") loginButton.click();
-    });
+      document.getElementById('menu').classList.add('hide');
+      document.getElementById('game').classList.add('show');
 
-    // Abrir mapa en otra pestaña
-    mapButton.addEventListener("click", () => {
-      window.open("http://23.160.168.170:45841/", "_blank", "noopener,noreferrer");
-    });
+      const flash = document.getElementById('flash');
+      const portal = document.getElementById('portal');
 
-    // Manejo básico de enfoque del iframe del juego
-    function focusGameIframe() {
-      try {
-        gameFrame.focus();
-        if (gameFrame.contentWindow) gameFrame.contentWindow.focus();
-      } catch (e) {}
+      flash.classList.add('active');
+      portal.classList.add('active');
+
+      setTimeout(() => {
+        flash.classList.remove('active');
+        portal.classList.remove('active');
+      }, 1200);
     }
-
-    gameFrame.addEventListener("click", focusGameIframe);
-    gameFrame.addEventListener("focus", focusGameIframe);
-
   </script>
 
 </body>
