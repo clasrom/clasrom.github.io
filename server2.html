@@ -263,6 +263,8 @@
    <!-- CAMBIA logo.png POR TU IMAGEN -->
    <img src="images/lospanas_logo.png" alt="Logo" class="logo" />
    <button class="play-btn" onclick="startGame()">JUGAR</button>
+  <p id="textToCopy">lospanas.eagler.host</p>
+  <button class="play-btn" onclick="copyToClipboard()" >🔴 COPIAR IP 🔴</button>
    <button class="resource-btn" onclick="window.open('https://www.dropbox.com/s/b04i5eqtqwrh5ub/QualityArmoryV1.0.40.zip?dl=1', '_blank')">Resourcepack</button>
    <button class="rules-btn" onclick="toggleRules()">NORMAS</button>
  </div>
@@ -326,7 +328,15 @@
    function toggleRules() {
      document.getElementById('rules').classList.toggle('show');
    }
-
+function copyToClipboard() {
+  const text = document.getElementById('textToCopy').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    // Optional: Provide user feedback (e.g., an alert or tooltip)
+    alert('Text copied to clipboard: ' + text);
+  }).catch(err => {
+    console.error('Could not copy text: ', err);
+  });
+}
 
  </script>
 
