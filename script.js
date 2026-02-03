@@ -243,7 +243,7 @@
           }
         });
       }
-      ['ent-row', 'juegos-row', 'herramientas-row', 'emuladores-row', 'reco-row', 'proxy-row'].forEach(rowId => {
+      ['ent-row', 'juegos-row', 'herramientas-row', 'reco-row', 'proxy-row'].forEach(rowId => {
         const el = document.getElementById(rowId);
         if (el) el.addEventListener('scroll', updateAllArrows, {passive:true});
       });
@@ -265,7 +265,7 @@
     const buscadorSentinela = document.getElementById('buscador-sentinela');
 
     function obtenerBotonesMenu() {
-      const secciones = ['ent-row', 'juegos-row', 'herramientas-row', 'reco-row'];
+      const secciones = ['ent-row', 'juegos-row', 'herramientas-row', 'reco-row', 'proxy-row'];
       let botones = [];
       secciones.forEach(id => {
         const fila = document.getElementById(id);
@@ -360,7 +360,8 @@ document.addEventListener('DOMContentLoaded', function() {
   [
     {row: 'ent-row', btn: 'ent-expand-arrow', wrap: 'ent'},
     {row: 'juegos-row', btn: 'juegos-expand-arrow', wrap: 'juegos'},
-    {row: 'herramientas-row', btn: 'herramientas-expand-arrow', wrap: 'herramientas'}
+    {row: 'herramientas-row', btn: 'herramientas-expand-arrow', wrap: 'herramientas'},
+    {row: 'reco-row', btn: 'reco-expand-arrow', wrap: 'reco'},
     {row: 'proxy-row', btn: 'proxy-expand-arrow', wrap: 'proxy'}
   ].forEach(({row, btn, wrap}) => {
     const arrowBtn = document.getElementById(btn);
