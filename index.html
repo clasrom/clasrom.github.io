@@ -484,12 +484,6 @@
           <button class="menu-button" onclick="abrirEnIframe('https://pixlr.com/es/editor/')">
             <img src="https://sp-ao.shortpixel.ai/client/to_auto,q_lossy,ret_img,w_720,h_380/https://louisem.com/wp-content/uploads/2015/02/pixlr-e-photo-editor-banner.png" alt="pixlr">
           </button>
-          <button class="menu-button" onclick="abrirEnIframe('https://us.best-server.work/')">
-            <img src="images/buscador1.png" alt="Proxy1">
-          </button>
-          <button class="menu-button" onclick="abrirEnIframe('https://wide-heart-401.guesstheanimal.org/')">
-            <img src="images/buscador2.png" alt="Proxy2">
-          </button>
           <button class="menu-button" onclick="abrirEnIframe('https://easyliterature.gearenergy.com/')">
             <img src="https://stadt-bremerhaven.de/wp-content/uploads/2023/05/Shadow-Logo-Gradient.jpg" alt="Proxy3">
           </button>
@@ -510,6 +504,31 @@
           </button>
         </div>
         <button class="carousel-arrow right" id="herramientas-arrow-right" onclick="scrollRow('herramientas', 1)" aria-label="Derecha">
+          <svg viewBox="0 0 48 48"><polyline points="16,12 32,24 16,36" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    <!-- SECCIÓN PROXYS -->
+    <div style="display: flex; flex-direction: column; align-items: flex-start;">
+            <!-- Flecha expandible a la izquierda -->
+          <button class="expand-arrow" id="proxys-expand-arrow" aria-label="Expandir">
+            <svg class="expand-triangle" viewBox="0 0 24 24" width="28" height="28">
+              <polygon points="12,18 4,6 20,6" fill="white"/>
+          </svg>
+        </button>
+      <div class="section-title">Proxys</div>
+      <div class="menu-buttons-row-wrapper">
+        <button class="carousel-arrow left" id="proxy-arrow-left" onclick="scrollRow('proxy', -1)" aria-label="Izquierda">
+          <svg viewBox="0 0 48 48"><polyline points="32,12 16,24 32,36" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="menu-buttons-row" id="proxy-row">
+          <button class="menu-button" onclick="abrirEnIframe('https://us.best-server.work/')">
+            <img src="images/buscador1.png" alt="Proxy1">
+          </button>
+          <button class="menu-button" onclick="abrirEnIframe('https://wide-heart-401.guesstheanimal.org/')">
+            <img src="images/buscador2.png" alt="Proxy2">
+          </button>
+        </div>
+        <button class="carousel-arrow right" id="proxy-arrow-right" onclick="scrollRow('proxy', 1)" aria-label="Derecha">
           <svg viewBox="0 0 48 48"><polyline points="16,12 32,24 16,36" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
