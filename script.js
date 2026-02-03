@@ -183,6 +183,7 @@
       updateArrows('ent');
       updateArrows('juegos');
       updateArrows('herramientas');
+      updateArrows('proxy');
     }
     window.addEventListener('resize', updateAllArrows);
     document.addEventListener('DOMContentLoaded', function() {
@@ -242,7 +243,7 @@
           }
         });
       }
-      ['ent-row', 'juegos-row', 'herramientas-row', 'emuladores-row', 'reco-row'].forEach(rowId => {
+      ['ent-row', 'juegos-row', 'herramientas-row', 'emuladores-row', 'reco-row', 'proxy-row'].forEach(rowId => {
         const el = document.getElementById(rowId);
         if (el) el.addEventListener('scroll', updateAllArrows, {passive:true});
       });
@@ -360,6 +361,7 @@ document.addEventListener('DOMContentLoaded', function() {
     {row: 'ent-row', btn: 'ent-expand-arrow', wrap: 'ent'},
     {row: 'juegos-row', btn: 'juegos-expand-arrow', wrap: 'juegos'},
     {row: 'herramientas-row', btn: 'herramientas-expand-arrow', wrap: 'herramientas'}
+    {row: 'proxy-row', btn: 'proxy-expand-arrow', wrap: 'proxy'}
   ].forEach(({row, btn, wrap}) => {
     const arrowBtn = document.getElementById(btn);
     const rowDiv = document.getElementById(row);
