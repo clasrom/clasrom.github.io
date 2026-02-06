@@ -48,19 +48,25 @@
     });
 
     toggleSettingsBtn.addEventListener("click", () => {
-      if (settingsPanel.classList.contains("show")) {
+      const abierto = settingsPanel.classList.contains("show");
+    
+      if (abierto) {
+        // Cerrar ajustes
         settingsPanel.classList.remove("show");
+    
         setTimeout(() => {
           menu.classList.remove("hidden");
-          menu.classList.remove("fade-out");
           menu.classList.add("fade-in");
+    
           setTimeout(() => {
             menu.classList.remove("fade-in");
           }, 500);
         }, 50);
+    
       } else {
-        menu.classList.remove("fade-out");
+        // Abrir ajustes
         menu.classList.add("fade-out");
+    
         setTimeout(() => {
           menu.classList.add("hidden");
           menu.classList.remove("fade-out");
@@ -68,6 +74,7 @@
         }, 500);
       }
     });
+
     function applySettings() {
       const newTitle = document.getElementById("titleInput").value;
       const newImage = document.getElementById("imageInput").value;
