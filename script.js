@@ -48,19 +48,25 @@
     });
 
     toggleSettingsBtn.addEventListener("click", () => {
-      if (settingsPanel.classList.contains("show")) {
+      const abierto = settingsPanel.classList.contains("show");
+    
+      if (abierto) {
+        // Cerrar ajustes
         settingsPanel.classList.remove("show");
+    
         setTimeout(() => {
           menu.classList.remove("hidden");
-          menu.classList.remove("fade-out");
           menu.classList.add("fade-in");
+    
           setTimeout(() => {
             menu.classList.remove("fade-in");
           }, 500);
         }, 50);
+    
       } else {
-        menu.classList.remove("fade-out");
+        // Abrir ajustes
         menu.classList.add("fade-out");
+    
         setTimeout(() => {
           menu.classList.add("hidden");
           menu.classList.remove("fade-out");
@@ -68,6 +74,7 @@
         }, 500);
       }
     });
+
     function applySettings() {
       const newTitle = document.getElementById("titleInput").value;
       const newImage = document.getElementById("imageInput").value;
@@ -183,6 +190,7 @@
       updateArrows('ent');
       updateArrows('juegos');
       updateArrows('herramientas');
+      updateArrows('proxy');
     }
     window.addEventListener('resize', updateAllArrows);
     document.addEventListener('DOMContentLoaded', function() {
@@ -242,7 +250,7 @@
           }
         });
       }
-      ['ent-row', 'juegos-row', 'herramientas-row', 'emuladores-row', 'reco-row'].forEach(rowId => {
+      ['ent-row', 'juegos-row', 'herramientas-row', 'reco-row', 'proxy-row'].forEach(rowId => {
         const el = document.getElementById(rowId);
         if (el) el.addEventListener('scroll', updateAllArrows, {passive:true});
       });
@@ -264,7 +272,7 @@
     const buscadorSentinela = document.getElementById('buscador-sentinela');
 
     function obtenerBotonesMenu() {
-      const secciones = ['ent-row', 'juegos-row', 'herramientas-row', 'reco-row'];
+      const secciones = ['ent-row', 'juegos-row', 'herramientas-row', 'reco-row', 'proxy-row'];
       let botones = [];
       secciones.forEach(id => {
         const fila = document.getElementById(id);
@@ -291,7 +299,7 @@
       });
       resultadosBusqueda.innerHTML = "";
       if (botonesFiltrados.length === 0) {
-        resultadosBusqueda.innerHTML = '<div style="color:#fff;font-size:1.1em;padding:32px;">No se encontró ningún botón.</div>';
+        resultadosBusqueda.innerHTML = '<div style="color:#fff;font-size:1.1em;padding:32px;">No se encontró ningúna app.</div>';
       } else {
         botonesFiltrados.forEach(btn => {
           const clon = btn.cloneNode(true);
@@ -359,7 +367,9 @@ document.addEventListener('DOMContentLoaded', function() {
   [
     {row: 'ent-row', btn: 'ent-expand-arrow', wrap: 'ent'},
     {row: 'juegos-row', btn: 'juegos-expand-arrow', wrap: 'juegos'},
-    {row: 'herramientas-row', btn: 'herramientas-expand-arrow', wrap: 'herramientas'}
+    {row: 'herramientas-row', btn: 'herramientas-expand-arrow', wrap: 'herramientas'},
+    {row: 'reco-row', btn: 'reco-expand-arrow', wrap: 'reco'},
+    {row: 'proxy-row', btn: 'proxy-expand-arrow', wrap: 'proxy'}
   ].forEach(({row, btn, wrap}) => {
     const arrowBtn = document.getElementById(btn);
     const rowDiv = document.getElementById(row);
