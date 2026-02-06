@@ -292,7 +292,7 @@
       });
       resultadosBusqueda.innerHTML = "";
       if (botonesFiltrados.length === 0) {
-        resultadosBusqueda.innerHTML = '<div style="color:#fff;font-size:1.1em;padding:32px;">No se encontró ningún botón.</div>';
+        resultadosBusqueda.innerHTML = '<div style="color:#fff;font-size:1.1em;padding:32px;">No se encontró ningúna app.</div>';
       } else {
         botonesFiltrados.forEach(btn => {
           const clon = btn.cloneNode(true);
