@@ -1,2 +1,9 @@
-Sentimos la interrupción de nuestros servicios durante estos días. Debido a problemas técnicos ajenos a nuestra voluntad, el acceso a la web y a nuestro catálogo de aplicaciones permaneció suspendido temporalmente.
-Ya hemos restablecido la plataforma por completo. Lamentamos las molestias y agradecemos su paciencia mientras trabajábamos para volver a estar operativos.
+Se ha incorporado una nueva sección de Proxys, se encuentra abajo de juegos.
+
+Se añade REPO (versión real) al catálogo de juegos, disponible para jugar directamente desde la web.
+$https://cdn.dlcompare.com/game_tetiere/upload/gameimage/file/r-e-p-o-file-207303896c.jpg.webp$
+Geometry Dash pasa a formar parte de los juegos disponibles en la plataforma.
+$https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/322170/capsule_616x353.jpg?t=1703006148$
+Además, se ha corregido un error detectado en el apartado de Ajustes, mejorando la estabilidad y el correcto funcionamiento del sistema.
+
+Continuamos trabajando en la mejora continua de la plataforma y en la incorporación de nuevos contenidos.
