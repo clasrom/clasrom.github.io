@@ -1,3 +1,11 @@
+    #version {
+      position: absolute;
+      top: 15px;   /* Distancia desde arriba */
+      left: 1150px; /* Distancia desde la izquierda */
+      color: rgb(255, 23, 23);
+      font-size: 20px;
+      text-shadow: 2px 2px 4px #000;
+    }
     .menu-hamburguesa-container {
       position: fixed;
       top: 10px;
@@ -6,6 +14,7 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      font-weight: bold;
     }
     .menu-hamburguesa-btn {
       border: none;
@@ -82,7 +91,7 @@
       cursor: pointer;
     }
     #novedades-box {
-      background: linear-gradient(-45deg, #6f0f8d 0%, #1e5f78 100% );
+      background: linear-gradient(-45deg, #9f266d 0%, #591e78 100% );
       border-radius: 18px;
       min-width: 260px;
       max-width: 380px;
@@ -164,13 +173,13 @@ html, body {
     @property --color-centro {
       syntax: '<color>';
       inherits: false;
-      initial-value: #0f5c7b;
+      initial-value: #30718b;
     }
 
     @property --color-fondo {
       syntax: '<color>';
       inherits: false;
-      initial-value: #4b1872;
+      initial-value: #4d216f;
     }
     @property --zoom {
       syntax: '<percentage>';
@@ -195,18 +204,18 @@ html, body {
     @keyframes fondoFluido {
       0% {
         --zoom: 25%;
-        --color-centro: #0f5c7b;
-        --color-fondo: #4b1872;
+        --color-centro: #598596;
+        --color-fondo: #725c91;
       }
       50% {
         --zoom: 180%; /* Zoom gigante */
         /* Mantenemos colores o los variamos mínimamente para evitar saltos visuales */
-        --color-centro: #166d91; 
+        --color-centro: #5d92a9; 
       }
       100% {
         --zoom: 110%;
-        --color-centro: #0f5c7b;
-        --color-fondo: #4b1872;
+        --color-centro: #5490a7;
+        --color-fondo: #a478b5;
       }
     }
     body.roll {
