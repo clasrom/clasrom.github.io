@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Link Descontinuado</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      position: relative;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 40px 40px 40px 40px;
+      top: 50px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      max-width: 500px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+      animation: fadeIn 1.5s ease forwards;
+    }
+
+    .logo {
+      width: 300px;
+      max-width: 80%;
+      position: absolute;
+      top: 20px; /* mitad de la altura para que flote encima */
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 20px;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+      margin-top: 20px;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+
+    a {
+      display: inline-block;
+      background-color: #fff;
+      color: #2575fc;
+      font-weight: 700;
+      padding: 15px 30px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+
+    a:hover {
+      background-color: #e0e0e0;
+      transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(-20px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <img src="images/clashrom.png" alt="Clashrom Logo" class="logo">
+  <div class="container">
+    <h1>404
+      🔗Este link ha sido descontinuado</h1>
+    <p>Pero no te preocupes, toda la información y funciones han sido trasladadas a:</p>
+    <a href="https://clasrom.vercel.app" target="_blank">clasrom.vercel.app</a>
+  </div>
+</body>
+</html>
